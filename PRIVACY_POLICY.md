@@ -118,8 +118,8 @@ To exercise any of these rights, please contact us at the email below.
 
 If you have any questions, concerns, or requests regarding this Privacy Policy, please contact us:
 
-📧 **Email:** your-email@example.com
-🌐 **GitHub:** https://github.com/your-username/sachcheck
+📧 **Email:** devicharandasari019@gmail.com
+🌐 **GitHub:** https://github.com/Charan-Dasari/sachcheck
 
 ---
 
