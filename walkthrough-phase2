@@ -1,0 +1,50 @@
+# Phase 2 Complete Walkthrough — SachDrishti
+
+## ✅ All 10 Features Implemented | `dart analyze` → 0 issues
+
+### New Files Created (5)
+| File | Purpose |
+|------|---------|
+| [text_scanner_screen.dart](file:///c:/Users/devic/AndroidStudioProjects/sachcheck/lib/screens/scanner/text_scanner_screen.dart) | Google Lens-like OCR scanner overlay |
+| [category_tagger.dart](file:///c:/Users/devic/AndroidStudioProjects/sachcheck/lib/services/category_tagger.dart) | Keyword-based news category auto-tagger |
+| [connectivity_service.dart](file:///c:/Users/devic/AndroidStudioProjects/sachcheck/lib/services/connectivity_service.dart) | Network availability checker |
+| [report_generator.dart](file:///c:/Users/devic/AndroidStudioProjects/sachcheck/lib/services/report_generator.dart) | PNG verification report card generator |
+| [history_item.g.dart](file:///c:/Users/devic/AndroidStudioProjects/sachcheck/lib/models/history_item.g.dart) | Regenerated Hive adapter |
+
+### Modified Files (10)
+| File | Changes |
+|------|---------|
+| [ocr_service.dart](file:///c:/Users/devic/AndroidStudioProjects/sachcheck/lib/services/ocr_service.dart) | [extractAllBlocks()](file:///c:/Users/devic/AndroidStudioProjects/sachcheck/lib/services/ocr_service.dart#54-88) + [OcrTextBlock](file:///c:/Users/devic/AndroidStudioProjects/sachcheck/lib/services/ocr_service.dart#252-263)/[OcrScanResult](file:///c:/Users/devic/AndroidStudioProjects/sachcheck/lib/services/ocr_service.dart#265-278) models |
+| [verification_result.dart](file:///c:/Users/devic/AndroidStudioProjects/sachcheck/lib/models/verification_result.dart) | Source reliability tiers + [toJson()](file:///c:/Users/devic/AndroidStudioProjects/sachcheck/lib/models/verification_result.dart#31-40)/`fromCacheJson()` + category |
+| [history_item.dart](file:///c:/Users/devic/AndroidStudioProjects/sachcheck/lib/models/history_item.dart) | `matchedArticlesJson` + `category` Hive fields |
+| [verification_engine.dart](file:///c:/Users/devic/AndroidStudioProjects/sachcheck/lib/services/verification_engine.dart) | Auto-categorization via [CategoryTagger](file:///c:/Users/devic/AndroidStudioProjects/sachcheck/lib/services/category_tagger.dart#5-94) |
+| [history_provider.dart](file:///c:/Users/devic/AndroidStudioProjects/sachcheck/lib/providers/history_provider.dart) | Article serialization to JSON |
+| [headline_editor_screen.dart](file:///c:/Users/devic/AndroidStudioProjects/sachcheck/lib/screens/editor/headline_editor_screen.dart) | "🔍 Scan Text" button + text-only mode |
+| [home_screen.dart](file:///c:/Users/devic/AndroidStudioProjects/sachcheck/lib/screens/home/home_screen.dart) | "✍️ Type a Headline" card |
+| [history_screen.dart](file:///c:/Users/devic/AndroidStudioProjects/sachcheck/lib/screens/history/history_screen.dart) | Search bar + verdict/category filter chips |
+| [result_screen.dart](file:///c:/Users/devic/AndroidStudioProjects/sachcheck/lib/screens/result/result_screen.dart) | Category badge + source badges + Export + Share to ChatRoom |
+| [chatroom_screen.dart](file:///c:/Users/devic/AndroidStudioProjects/sachcheck/lib/screens/chat/chatroom_screen.dart) | 📎 Attachment button + image messages + bottom sheet |
+
+---
+
+### Feature Details
+
+**1. 🔍 OCR Text Scanner** — Full-screen `InteractiveViewer` with tappable text block overlays. Select → Copy or "Use as Headline".
+
+**2. 📦 Offline Article Cache** — Matched articles serialized as JSON in Hive. Available offline.
+
+**3. ✍️ Text-Only Verification** — New green "Type a Headline" card on home → editor with auto-focused text field.
+
+**4. 📡 Network Error Handling** — [ConnectivityService](file:///c:/Users/devic/AndroidStudioProjects/sachcheck/lib/services/connectivity_service.dart#5-20) with HTTP HEAD check.
+
+**5. 🔎 History Search & Filter** — Search bar + verdict chips (✅⚠️❌) + dynamic category chips.
+
+**6. 🏷️ Category Tags** — Auto-tagged: Politics 🏛️, Health 🏥, Science 🔬, Finance 💰, Sports ⚽, Tech 💻, Entertainment 🎬.
+
+**7. 🟢 Source Reliability** — 🟢 Established, 🟡 Aggregator, 🔵 Reference, ⚪ Other — on each article card.
+
+**8. 📤 Export Report** — Share button generates text-based verification report via share sheet.
+
+**9. 📎 ChatRoom Media** — Attachment button with Camera/Gallery/Screenshot → base64 image messages in chat.
+
+**10. 💬 Share to ChatRoom** — "ChatRoom" button on result screen sends `verification_share` to Firestore.

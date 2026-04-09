@@ -1,0 +1,59 @@
+# Verification Engine Overhaul — Walkthrough
+
+## Problem
+Fake headlines like **"India won World War 4"** and **"PM MODI Died"** were getting incorrectly classified as "Needs Caution" (19%) and "Verified" (49%).
+
+## Root Cause
+- Thresholds too low (20% = Verified)
+- No absurdity detection
+- Keyword overlap inflated by single common words ("Modi" → "Lalit Modi" = 49%)
+- Wikipedia/reference matches weighted same as AP/Reuters
+
+## Changes Made
+
+### 1. [verification_engine.dart](file:///c:/Users/devic/AndroidStudioProjects/sachcheck/lib/services/verification_engine.dart) — Complete Rewrite
+
+**6 new scoring layers:**
+| Layer | What it does |
+|-------|-------------|
+| Absurdity detection | Flags death hoaxes, fabricated events (WW4), clickbait patterns |
+| Semantic subject matching | "PM Modi Died" vs "Lalit Modi" → subjects don't match → 75% penalty |
+| Headline coverage | <40% of headline keywords in article → 50% penalty |
+| Source-tier weighting | Wikipedia × 0.55, Established × 1.0, Unknown × 0.5 |
+| Weighted keyword overlap | Longer words count more than short ones |
+| Consensus scoring | 3+ high-match sources = +5% confidence bonus |
+
+**Raised thresholds:** 55% for Verified (was 20%), 30% for Caution (was 8%)
+
+### 2. [verification_result.dart](file:///c:/Users/devic/AndroidStudioProjects/sachcheck/lib/models/verification_result.dart)
+- Added `confidenceLevel` field (`"High"`, `"Medium"`, `"Low"`)
+- Added `flags` field (`List<String>`) for absurdity warnings
+- Expanded established sources to **40+ outlets** (NDTV, India Today, Zee News, Republic, The Quint, etc.)
+
+### 3. [news_api_service.dart](file:///c:/Users/devic/AndroidStudioProjects/sachcheck/lib/services/news_api_service.dart)
+- Added 4 new dedicated Indian source fetchers via Google News RSS site-filter:
+  - **NDTV**, **Hindustan Times**, **India Today**, **Times of India**
+- Total sources now: **10** (was 6)
+
+### 4. [result_screen.dart](file:///c:/Users/devic/AndroidStudioProjects/sachcheck/lib/screens/result/result_screen.dart)
+- Warning flags displayed below headline (amber bordered cards)
+- Confidence level badge next to match score
+- 4 new source pills in "Checked on" row
+
+## Build Verification
+```
+> dart analyze lib
+Analyzing lib...
+No issues found!
+```
+
+## Expected Behavior After Changes
+
+| Headline | Before | After |
+|----------|--------|-------|
+| "India won World War 4" | ⚠ Needs Caution (19%) | ❌ Not Verified + "fabricated event" flag |
+| "PM MODI Died" | ✅ Verified (49%) | ❌ Not Verified + "death hoax" flag |
+| Real headline from NDTV | ✅ Verified | ✅ Verified (with higher confidence) |
+
+## Next Step
+Run `flutter run` on your device and test with the same screenshots!
