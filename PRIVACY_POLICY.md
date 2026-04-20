@@ -129,10 +129,4 @@ We may update this Privacy Policy from time to time. We will notify you of any s
 
 ---
 
-## 12. Governing Law
-
-This Privacy Policy is governed by the laws of **India**. Any disputes arising from this policy shall be subject to the jurisdiction of Indian courts.
-
----
-
 *This Privacy Policy was last updated on April 9, 2025.*
