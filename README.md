@@ -194,7 +194,7 @@ SachDrishti is committed to protecting your privacy. Our full Privacy Policy is 
 
 > This link is required for Google Play Store submission. Once you push this repo to GitHub, your hosted Privacy Policy URL will be:
 > ```
-> https://Charan-Dasari.github.io/sachcheck/PRIVACY_POLICY
+> PRIVACY_POLICY.md
 > ```
 > or via raw GitHub:
 > ```
