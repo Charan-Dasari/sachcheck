@@ -70,10 +70,11 @@ class VerificationEngine {
       final descDice = _diceCoefficient(cleanHeadline, articleDesc);
       final descKeyword = _weightedKeywordOverlap(cleanHeadline, articleDesc);
 
-      // Combined base score (title weighted more than description)
+      // Combined base score (title weighted heavily on keywords)
+      // Dice coefficient is notoriously bad for identifying semantic match, reducing weight
       double baseScore = (
-        (titleDice * 0.35 + titleKeyword * 0.65) * 0.75 +
-        (descDice * 0.35 + descKeyword * 0.65) * 0.25
+        (titleDice * 0.15 + titleKeyword * 0.85) * 0.75 +
+        (descDice * 0.15 + descKeyword * 0.85) * 0.25
       );
 
       // ── Semantic subject match penalty ──────────────────────────────
@@ -85,10 +86,12 @@ class VerificationEngine {
       }
 
       // ── Headline coverage check ─────────────────────────────────────
-      // Penalize if less than 40% of headline keywords appear in article
+      // Drastically penalize if the entire claim isn't covered in the article
       final coverage = _headlineCoverage(headlineKeywords, articleTitle, articleDesc);
-      if (coverage < 0.4) {
-        baseScore *= 0.5;
+      if (coverage < 0.40) {
+        baseScore *= 0.20; // Heavy penalty for matching just one or two words (e.g. "Dawood", "India")
+      } else if (coverage < 0.65) {
+        baseScore *= 0.60;
       }
 
       // ── Source tier weighting ────────────────────────────────────────
@@ -114,17 +117,17 @@ class VerificationEngine {
     Verdict verdict;
     String confidenceLevel;
 
-    if (isAbsurd && adjustedScore < 0.65) {
+    if (isAbsurd && adjustedScore < 0.75) {
       // Absurdity detected and no strong corroboration → force Not Verified
       verdict = Verdict.notVerified;
       confidenceLevel = 'High';
       if (!flags.contains('No strong corroboration found for this extraordinary claim')) {
         flags.add('No strong corroboration found for this extraordinary claim');
       }
-    } else if (adjustedScore >= 0.55) {
+    } else if (adjustedScore >= 0.70) {
       verdict = Verdict.verified;
       confidenceLevel = highMatchCount >= 3 ? 'High' : 'Medium';
-    } else if (adjustedScore >= 0.30) {
+    } else if (adjustedScore >= 0.40) {
       verdict = Verdict.needsCaution;
       confidenceLevel = 'Medium';
     } else {
@@ -189,6 +192,8 @@ class VerificationEngine {
       RegExp(r'(india|china|pakistan|usa)\s*(conquered|invaded|destroyed|nuked)\s*(india|china|pakistan|usa|the world)', caseSensitive: false),
       RegExp(r'(india|pakistan)\s+won\s+(world\s*war|ww)', caseSensitive: false),
       RegExp(r'(end\s*of\s*the\s*world|earth\s*destroyed|apocalypse\s*confirmed)', caseSensitive: false),
+      RegExp(r'(is\s+coming\s+back\s+to\s+india|returns\s+to\s+india\s+secretly)', caseSensitive: false),
+      RegExp(r'(resigns\s+unexpectedly|quits\s+immediately)\s+(pm|president|cm)', caseSensitive: false),
     ];
     for (final pattern in fabricatedPatterns) {
       if (pattern.hasMatch(lower)) {

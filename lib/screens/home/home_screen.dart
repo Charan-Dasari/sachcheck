@@ -8,6 +8,7 @@ import 'package:sachcheck/main.dart' show pendingShareImagePath;
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
+
   @override
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
@@ -77,6 +78,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                           width: 70,
                           height: 70,
                           fit: BoxFit.cover,
+                          color: isDark ? null : AppColors.primary,
                         ),
                       ),
                       // ─────────────────────────────────────────────────────

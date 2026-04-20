@@ -56,9 +56,11 @@ class _SplashScreenState extends State<SplashScreen>
     final txtSec = isDark ? AppColors.textSecondary : AppColors.lightTextSecondary;
 
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: Stack(
+        children: [
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // ── Animated logo ───────────────────────────────────────────────
             AnimatedBuilder(
@@ -83,7 +85,7 @@ class _SplashScreenState extends State<SplashScreen>
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(28),
                       child: Image.asset(
-                        'assets/images/SachDristhi_1.png',
+                        isDark ? 'assets/images/SachDristhi_2.png' : 'assets/images/SachDristhi_1.png',
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -139,7 +141,39 @@ class _SplashScreenState extends State<SplashScreen>
               ),
             ),
           ],
-        ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 40.0),
+              child: FadeTransition(
+                opacity: _fadeAnim,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Powered by',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: txtSec,
+                        letterSpacing: 1.2,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    // Marwadi University Logo
+                    Image.asset(
+                      'assets/images/mu_logo.png',
+                      height: 45,
+                      fit: BoxFit.contain,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

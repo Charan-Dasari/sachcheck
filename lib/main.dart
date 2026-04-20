@@ -12,9 +12,17 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    // If native already initialized the default app but with different options
+    // (due to mismatches with google-services.json), we fallback.
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp();
+    }
+  }
 
   // Initialize Hive local storage
   await Hive.initFlutter();

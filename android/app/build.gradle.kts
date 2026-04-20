@@ -21,7 +21,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.sachcheck.sachcheck"
+        applicationId = "com.marwadiuniversity.sachdrishti"
         minSdk = 24
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode

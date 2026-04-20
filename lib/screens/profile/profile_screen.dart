@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sachcheck/core/theme.dart';
 import 'package:sachcheck/providers/auth_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -184,6 +185,22 @@ class ProfileScreen extends ConsumerWidget {
                         txtSec: txtSec,
                         onTap: () => _showAbout(context, isDark, surfColor),
                       ),
+                      Divider(height: 1, color: divColor),
+                      _SettingsTile(
+                        icon: Icons.privacy_tip_outlined,
+                        label: 'Privacy Policy',
+                        txtPrimary: txtPrimary,
+                        txtSec: txtSec,
+                        onTap: () => _launchURL('https://github.com/Charan-Dasari/sachcheck/blob/main/PRIVACY_POLICY.md-  '),
+                      ),
+                      Divider(height: 1, color: divColor),
+                      _SettingsTile(
+                        icon: Icons.person_outline_rounded,
+                        label: 'Developed By',
+                        txtPrimary: txtPrimary,
+                        txtSec: txtSec,
+                        onTap: () => _showDeveloper(context, surfColor, txtPrimary, txtSec),
+                      ),
                     ],
                   ),
                 ),
@@ -242,6 +259,112 @@ class ProfileScreen extends ConsumerWidget {
             child: const Text('OK'),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showDeveloper(BuildContext context, Color surfColor, Color txtPrimary, Color txtSec) {
+    showDialog(
+      context: context,
+      builder: (dialogCtx) => AlertDialog(
+        backgroundColor: surfColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        contentPadding: const EdgeInsets.all(24),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const CircleAvatar(
+                radius: 40,
+                backgroundImage: NetworkImage('https://github.com/Charan-Dasari.png'),
+                backgroundColor: AppColors.primary,
+              ),
+              const SizedBox(height: 16),
+              Text('Developed By', style: TextStyle(fontSize: 12, color: txtSec, fontWeight: FontWeight.w600, letterSpacing: 1.2)),
+              const SizedBox(height: 4),
+              Text('Devicharan Dasari', 
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: txtPrimary)),
+              const SizedBox(height: 4),
+              Text('CE B.Tech Computer Engineering',
+                style: TextStyle(fontSize: 14, color: txtSec),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _SocialButton(
+                    icon: Icons.code_rounded,
+                    label: 'GitHub',
+                    color: txtPrimary,
+                    onTap: () => _launchURL('https://github.com/Charan-Dasari'),
+                  ),
+                  const SizedBox(width: 32),
+                  _SocialButton(
+                    icon: Icons.work_outline_rounded,
+                    label: 'LinkedIn',
+                    color: const Color(0xFF0077B5),
+                    onTap: () => _launchURL('https://www.linkedin.com/in/devicharan-dasari-b57468276/'),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              Divider(color: txtSec.withValues(alpha: 0.2)),
+              const SizedBox(height: 24),
+              CircleAvatar(
+                radius: 40,
+                backgroundColor: txtSec.withValues(alpha: 0.1),
+                backgroundImage: const AssetImage('assets/images/img.png'),
+              ),
+              const SizedBox(height: 16),
+              Text('Guided By', style: TextStyle(fontSize: 12, color: txtSec, fontWeight: FontWeight.w600, letterSpacing: 1.2)),
+              const SizedBox(height: 4),
+              Text('Jigar Dave', 
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: txtPrimary)),
+              const SizedBox(height: 4),
+              Text('Assistant Professor\nFoET, Marwadi University\nProject Guide',
+                style: TextStyle(fontSize: 14, color: txtSec, height: 1.4),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+Future<void> _launchURL(String urlString) async {
+  final url = Uri.parse(urlString);
+  try {
+    await launchUrl(url, mode: LaunchMode.externalApplication);
+  } catch (e) {
+    debugPrint('Could not launch \$url: \$e');
+  }
+}
+
+class _SocialButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
+  
+  const _SocialButton({required this.icon, required this.label, required this.color, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Icon(icon, color: color, size: 28),
+            const SizedBox(height: 4),
+            Text(label, style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.w600)),
+          ],
+        ),
       ),
     );
   }
