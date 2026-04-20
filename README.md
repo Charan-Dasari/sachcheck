@@ -216,19 +216,6 @@ We **do not** sell or share your data with third parties.
 ---
 
 
-
-## 🤝 Contributing
-
-Contributions are welcome! Please open an issue first to discuss what you'd like to change.
-
-1. Fork the repository
-2. Create your feature branch: `git checkout -b feature/amazing-feature`
-3. Commit your changes: `git commit -m 'Add some amazing feature'`
-4. Push to the branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
-
----
-
 ## 👨‍💻 Author : Devicharan Dasari
 
 Built with ❤️ for combating misinformation in India.
